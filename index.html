@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Events!</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href=assets/css/style.css>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="assets/javascript/game.js"></script>
 </head>
@@ -16,16 +17,36 @@
             <div class="row">
                 <div class="col-md-offset-2 col-md-8">
                     <div class="jumbotron">
+                        <h2>press any key to begin</h2>
                         <h2>You just typed <span id="user-text"><strong>...Nothing.</strong></span></h2>
+                        <hr>
                         <p>Wins</p>
                         <p id="wins-text">Put number of wins here</p>
+                        <hr>
                         <p>Current Word</p>
-                        <p>Put Current Word here</p>
+                        <p id="word-text">Put Current Word here</p>
+                        <hr>
+                        <p>Hidden Word</p>
+                        <p id="hidden-text">Put Hidden Word here</p>
+                        <hr>
                         <p>Number of Guesses Remaining:</p>
                         <p id="guesses-text">Put Number of Guesses Remaining: Here</p>
+                        <hr>
                         <p>Letters Already Guessed:</p>
                         <p id="letters-text">Put Letters Already Guessed: Here</p>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!--
+        Requirements Question:
+        Which behavior do I want?
+        1. First key press initializes game but is not counted as a guess - not in rubric
+        2. First key press is counted as the first guess of a game already initialized -suggested by rubric
+            1. must choose word to be guessed and display it before first key press
+            2. must restart game at win or loss
+
+        How Should "press any key to begin" behave?
+        1. Stay on screen throughout gameplay? Start with (1) but do (2) as bonus
+        2. Appear with new game initialization, but disappear (or be replaced with other text) during play
