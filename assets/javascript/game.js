@@ -80,40 +80,79 @@
             var guessedLetter = event.key;
             userText.textContent = guessedLetter;
 
-            //write some code here look for the guessedLetter within the current word to be guessed
-            //--determine whether guessedLetter is in current word (use indexOf)
-            if (word.toLowerCase().indexOf(guessedLetter.toLowerCase()) > -1) {
-                //guessedLetter is in the word
+            //write some code here to check if this guess has been tried previously
+            //--if it has then no need to check if it in the word to be guessed, nor update anything
+            //--so check guessedLetter against guessedLetters
+            //--if guessedLetter is already in guessedLetters, then skip all checks and go back to waiting for a key event
+            if (guessedLetters.toLowerCase().indexOf(guessedLetter.toLowerCase()) < 0) {
+                //the new guess is unique, has never been tried before
+                //run all checks on guess and update all variables
 
-                //write some code here that finds the location of the guessedLetter in the word to be guessed
-                //--then replace the underscore in that loction of hiddenWord with the guessed letter
+                //first, since guess is unique, guessedLetter should be added to the list of guessedLetters
+                //second, decrement the number of remaining guesses, since user has just mad an unique guess
+                //third, check to see if the new guess is in the current word to be guessed
 
-                //What if I took guessedLetter, then walked through word and hiddenWord simultaneously
-                //--checking charAt in word against guessed letter
-                //if charAt in word == guessedletter then newWord += guessedletter + one space char
-                //else newWord += hiddenword.charAt (twice the index into word ) plus one space character
-                //then set hiddenWord = newHiddenWord
+                //(first step per above) write some code here to add guessedLetter to the list of guessedLetters
+                guessedLetters += (guessedLetter + " "); //string immutability !?! Why does this work?
+                
+                //(second step per above) write some code here that decrements the number of remaining guesses
+                //we will check later to see if user is out of guesses
+                numGuesses--; //do unconditionally since we are already inside a conditional that checked if this was an unique guess
+ 
+                //(third step per above) write some code to check if new guess is in word and if so update hiddenWord
+                //--use indexOf to determine whether guessedLetter is in word 
+                if (word.toLowerCase().indexOf(guessedLetter.toLowerCase()) > -1) {
+                    //guessedLetter is in the word
+                    //--so proceed to update the display of underscores and guessed letters (user progress in game)
 
-                var newHiddenWord = ""
-                for (i = 0; i < word.length; i++) { //remember that hiddenWord and newHiddenWord are twice as long as word
-                    if (word.charAt(i).toLowerCase() === guessedLetter.toLowerCase()) {
-                        newHiddenWord += (guessedLetter + " ") //I don't understand string immutability
-                    } else {
-                        newHiddenWord += (hiddenWord.charAt(2 * i) + " "); //hiddenWord has chars at 0,2,4,etc and spaces at 1,3,5,etc
-                    }
-                }
-                hiddenWord = newHiddenWord; //modify (? replace ?) global string value of hiddenWord --- I really don't understand string immutability
-            }
+                    //write some code here that finds the location of the guessedLetter in the word to be guessed
+                    //--then replace the underscore in that loction of hiddenWord with the guessed letter
+                    //could do that literally if using any array, but must rebuild string because immutability
+
+                    //What if I took guessedLetter, then walked through word and hiddenWord simultaneously
+                    //--checking charAt in word against guessed letter
+                    //--if charAt in word == guessedletter then newWord += guessedletter + one space char
+                    //--else newWord += hiddenword.charAt (twice the index into word ) plus one space character
+                    //--then set hiddenWord = newHiddenWord
+
+                    var newHiddenWord = ""; //declare null string as starting point to build combination of underscores and guessed letters
+                    //walk through the word to be guessed one char at a time looking for match to guessedLetter
+                    for (i = 0; i < word.length; i++) { 
+                        //use charAt and toLowerCAse methods to compare guessedLetter to each char of word
+                        if (word.charAt(i).toLowerCase() === guessedLetter.toLowerCase()) {
+                            //found a match
+                            //need to concatenate the guessedLetter and one space char to existing newHiddenWord string
+                            newHiddenWord += (guessedLetter + " ") //I REALLY don't understand string immutability
+                            
+                        } else {
+                            //did not match, i.e., guessedLetter not in current word to be guessed
+                            //need to concatenate the pre-existing character at this location in hiddenWord plus one space char to newHiddenWord
+                            //BTW, could have used .slice(2*i, 2*i+2), next time I will
+
+                            //remember that hiddenWord and newHiddenWord will be twice as long as word
+                            newHiddenWord += (hiddenWord.charAt(2 * i) + " "); //hiddenWord has chars at 0,2,4,etc and spaces at 1,3,5,etc
+                        }
+                    } //this line closes the for loop, at this point newHiddenWord has finished building
+                    hiddenWord = newHiddenWord; //modify (? replace ?) global string value of hiddenWord --- I really don't understand string immutability
+
+                    //need to check to see if user has won the game since he has guessed a letter correctly
+                    //put some code here to see if entire word has been guessed and if so to do whatever necessary to end game with win
+
+                } else { //guessedLetter is NOT in the word
+                    //do not need to update hiddenWord
+                    //need to check if user has lost the game since he made unique but wrong guess
+                } //this line closes the else where we checked for if the user had lost
+
+            } //this line closes the if that checked for whether the guess was unique
 
 
-            //write some code  to compare the guessedLetter with the list of previously guessed letters
+
+
+            
 
             //update game state global variables
             wins++;
-            if (guessedLetters.toLowerCase().indexOf(guessedLetter.toLowerCase()) < 0){
-                guessedLetters += (guessedLetter + " "); //need to write some code here to check if this letter previously used
-                numGuesses--; //need some code here that checks if this letter previously used before deciding to decrement numGuesses 
-            }
+
 
 
             console.log("Wins = " + wins);
