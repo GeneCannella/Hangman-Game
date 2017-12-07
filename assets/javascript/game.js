@@ -6,15 +6,17 @@
 
         //get references for all the HTML elements that will be updated during gameplay
         //These references are in global scope
-        var userText = document.getElementById("user-text"); //displays most recent guessed letter (guessedLetter)
+        //var userText = document.getElementById("user-text"); //displays most recent guessed letter (guessedLetter)
         var winsText = document.getElementById("wins-text"); //displays current number of user wins (wins)
         var guessesText = document.getElementById("guesses-text"); //displays current number of remaining guesses (numGuesses)
         var lettersText = document.getElementById("letters-text"); //displays list of guessed letters (guessedLetters)
         var wordText = document.getElementById("word-text"); //displays word to be guessed by user (word) //for tesing purposes only
         var hiddenText = document.getElementById("hidden-text");
+        var pressedText = document.getElementById("pressed-key");
+        var statusText = document.getElementById("status-text");
 
         //declare game state global variables
-        var wins, numGuesses, guessedLetters, word, hiddenWord;
+        var wins, numGuesses, guessedLetters, word, hiddenWord, numCorrect, winMessage, gameOver, beginMessage, statusMessage;
         //wins: (number) used to hold the current value of games won by user
         //--is displayed
         //numGuesses: (number) used to hold the current value of allowed user guesses remaining in the game
@@ -52,6 +54,13 @@
             for (i = 0; i < word.length; i++) {
                 hiddenWord += "_ ";
             }
+
+            numCorrect = 0;
+            winMessage = " ";
+            gameOver = false;
+            beginMessage = "PRESS ANY KEY TO BEGIN";
+            statusMessage = "Ready To Begin";
+
         } //this closes the initGame function
 
         //function to place text in UI
@@ -64,24 +73,37 @@
             lettersText.textContent = guessedLetters;
             wordText.textContent = word;
             hiddenText.textContent = hiddenWord;
+            pressedText.textContent = beginMessage;
+            statusText.textContent = statusMessage;
         }
-
-
-
 
         //Begin game execution 
         //--think about whether these two function calls should be moved to after the onkeyup function definition--//   
         initGame();
         setSomeText();
 
-
         //this function is the event handler that fires off for every user guess and runs all code associated with one user turn 
         document.onkeyup = function(event) {
             var guessedLetter = event.key;
-            userText.textContent = guessedLetter;
+
+            if (gameOver) {
+                if (guessedLetter === "y") {
+                    initGame();
+                    setSomeText();
+                }
+            } else {
+            
+            //Give user indication of what letter he guessed. Replaces "Press any key to begin" message
+            beginMessage = "YOU JUST GUESSED..." + guessedLetter
+            pressedText.textContent = beginMessage;
+
+            //make sure that game status message is set to "in progress"
+            statusMessage = "In Progress";
+
+
 
             //write some code here to check if this guess has been tried previously
-            //--if it has then no need to check if it in the word to be guessed, nor update anything
+            //--if it has then no need to check if it is in the word to be guessed, nor update anything
             //--so check guessedLetter against guessedLetters
             //--if guessedLetter is already in guessedLetters, then skip all checks and go back to waiting for a key event
             if (guessedLetters.toLowerCase().indexOf(guessedLetter.toLowerCase()) < 0) {
@@ -121,6 +143,7 @@
                         //use charAt and toLowerCAse methods to compare guessedLetter to each char of word
                         if (word.charAt(i).toLowerCase() === guessedLetter.toLowerCase()) {
                             //found a match
+                            numCorrect++;
                             //need to concatenate the guessedLetter and one space char to existing newHiddenWord string
                             newHiddenWord += (guessedLetter + " ") //I REALLY don't understand string immutability
                             
@@ -138,31 +161,46 @@
                     //need to check to see if user has won the game since he has guessed a letter correctly
                     //put some code here to see if entire word has been guessed and if so to do whatever necessary to end game with win
 
-                } else { //guessedLetter is NOT in the word
-                    //do not need to update hiddenWord
-                    //need to check if user has lost the game since he made unique but wrong guess
-                } //this line closes the else where we checked for if the user had lost
+                } //This line closes the if that checks to see if guessedLetter is in word
+
+                
+                //Here we need to check if user has won or lost or is still playing
+                //the global variables wins, numGuesses, and numCorrect can be used to eval win or lose
+                //if the user is out of guesses, but has solved the puzzle, they still win
+                //so first check for solved puzzle
+                //--if true then increment wins
+                if (numCorrect === word.length) {
+                    winMessage = "You Win!";
+                    wins++;
+                    gameOver = true;
+                    console.log(winMessage + " " + wins);
+                } else if (numGuesses === 0) {
+                    winMessage = "You Lose!";
+                    console.log(winMessage + " " + wins);
+                    gameOver = true;
+                } else {
+                    gameOver = false;
+                }
+
+
 
             } //this line closes the if that checked for whether the guess was unique
 
-
-
-
-            
-
             //update game state global variables
-            wins++;
+            //wins++;
+            if (gameOver) {
+                statusMessage = "Game Over..." + winMessage;
+                beginMessage = "PLAY AGAIN? (y/n)";
 
-
-
-            console.log("Wins = " + wins);
-            console.log("numGuesses = " + numGuesses);
-            console.log("guessedLetter = " + guessedLetter);
-            console.log("current word = " + word);
-
+            }
             setSomeText();
-
-        };
+            console.log("gameover = " + gameOver);
+        }
+        }; //I think this line closes the onkeyup function
 
 
     }); //This line closes the document.ready function
+
+    //what should happen at gameover
+    //beginMessage should become "press any key"
+    //game status (id=status-text) should become "you Won" or "You lost"
