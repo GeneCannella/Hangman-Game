@@ -18,8 +18,36 @@ p {
 
 h1, h2, h3, p {
 	text-align: center;
+	color: white;
 }
 
-html {
+
+body {
 	background-image: url("../images/got.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
 }
+
+
+.container {
+/*opacity:0.5;*/
+	background: rgba(76, 175, 80, 0.0);
+	/*background-image: url("../images/the-wall.jpg");
+	background-size: cover;*/
+}
+
+#tp1 {
+	background: rgba(255, 175, 80, 0.0);
+}
+
+#tp2 {
+	background: rgba(255, 0, 80, 0.0);
+}
+
+.jumbotron {
+	background-image: url("../images/wallhaven-270141.jpg");
+	background-size: contain;
+	opacity:1.0;
+}
+}
+
