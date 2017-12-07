@@ -10,7 +10,7 @@
         var winsText = document.getElementById("wins-text"); //displays current number of user wins (wins)
         var guessesText = document.getElementById("guesses-text"); //displays current number of remaining guesses (numGuesses)
         var lettersText = document.getElementById("letters-text"); //displays list of guessed letters (guessedLetters)
-        var wordText = document.getElementById("word-text"); //displays word to be guessed by user (word) //for tesing purposes only
+        //var wordText = document.getElementById("word-text"); //displays word to be guessed by user (word) //for testing purposes only
         var hiddenText = document.getElementById("hidden-text");
         var pressedText = document.getElementById("pressed-key");
         var statusText = document.getElementById("status-text");
@@ -71,7 +71,7 @@
             winsText.textContent = wins;
             guessesText.textContent = numGuesses;
             lettersText.textContent = guessedLetters;
-            wordText.textContent = word;
+            //wordText.textContent = word;
             hiddenText.textContent = hiddenWord;
             pressedText.textContent = beginMessage;
             statusText.textContent = statusMessage;
